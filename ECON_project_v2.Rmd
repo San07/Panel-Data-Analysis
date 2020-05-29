@@ -1,0 +1,336 @@
+---
+title: "ECON_Project"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+
+
+#### Installing Libraries
+
+libraries <- c("reshape2","usmap","ggcorrplot","readstata13","foreign","plm","lmtest","plotly","dplyr","ggplot2","tidyverse","caret","readxl","tidyverse","dplyr","plotrix","caret","FNN","rpart","rpart.plot","plotrix","plotly","summarytools","RColorBrewer","rattle")
+
+for (libnames in libraries){
+  if(!(libnames %in% installed.packages()[,"Package"])){
+    install.packages(libnames,dependency = TRUE)
+  }
+  else {
+    sapply(libnames, library, character.only = TRUE)
+  }
+}
+
+car_fatalities.df <- read.dta13("car_fatalities.dta")
+summary(car_fatalities.df)
+head(car_fatalities.df)
+
+car_fatalities.df$law <- ifelse(car_fatalities.df$jaild == 1,"Conviction",ifelse(car_fatalities.df$comserd == 1, "Conviction","No Conviction"))
+
+car_fatalities.df.complete <- car_fatalities.df[complete.cases(car_fatalities.df),]
+
+ggplot(data=car_fatalities.df, aes(x=year, y=spircons, color = spircons, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=unrate, color = unrate, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=perinc, color = perinc, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=beertax, color = beertax, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=sobapt, color = sobapt, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mormon, color = mormon, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mlda, color = mlda, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=yngdrv, color = yngdrv, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=vmiles, color = vmiles, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=jaild, color = jaild, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=comserd, color = comserd, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=allmort, color = allmort, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mrall, color = mrall, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=allnite, color = allnite, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mralln, color = mralln, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=allsvn, color = allsvn, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=a1517, color = a1517, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mra1517, color = mra1517, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=a1820, color = a1820, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=a1820n, color = a1820n, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mra1820, color = mra1820, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mra1820n, color = mra1820n, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=a2124, color = a2124, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=a2124n, color = a2124n, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mra2124, color = mra2124, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mra2124n, color = mra2124n, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=aidall, color = aidall, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=mraidall, color = mraidall, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=pop, color = pop, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=pop1517, color = pop1517, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=pop1820, color = pop1820, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=pop2124, color = pop2124, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=miles, color = miles, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+ggplot(data=car_fatalities.df, aes(x=year, y=gspch, color = gspch, fill = year)) +
+  geom_line(stat="identity") + facet_wrap(~state)
+
+
+ggcorrplot(cor(car_fatalities.df[,-c(1,2,13,14,34,35,36,37,40)]))
+
+
+plot_usmap(data = car_fatalities.df, values = "mrall", lines = "red") + 
+  scale_fill_continuous(name = "Vehicle Fatality Rate") + 
+  theme(legend.position = "right")
+
+
+attach(car_fatalities.df)
+al_car_fatalities.df <- car_fatalities.df[which(state =='AL'),]
+detach(car_fatalities.df)
+
+attach(car_fatalities.df)
+ct_car_fatalities.df <- car_fatalities.df[which(state =='CT'),]
+detach(car_fatalities.df)
+
+
+normalized.value <- preProcess(car_fatalities.df[,c(3:39)],method = c("center","scale"))
+car_fatalities.df.norm <- predict(normalized.value, car_fatalities.df)
+
+normalized.value <- preProcess(al_car_fatalities.df[,c(3:39)],method = c("center","scale"))
+al_car_fatalities.norm <- predict(normalized.value, al_car_fatalities.df)
+
+normalized.value <- preProcess(ct_car_fatalities.df[,c(3:39)],method = c("center","scale"))
+ct_car_fatalities.norm <- predict(normalized.value, ct_car_fatalities.df)
+
+
+ggplot(al_car_fatalities.norm, aes(x = year)) +
+  geom_line(aes(y = jaild), colour="violet") + 
+  geom_line(aes(y = comserd), colour="pink") +
+  geom_line(aes(y = mra1517), colour = "red") +
+  geom_line(aes(y = mra1820), colour = "red") +
+  geom_line(aes(y = mra2124), colour="blue") + 
+  geom_line(aes(y = spircons), colour="green") + 
+  geom_line(aes(y = beertax), colour="yellow") + 
+  ylab(label="Vehicle Fatality Rate") + 
+  xlab("Year")
+
+ggplot(ct_car_fatalities.norm, aes(x = year)) +
+  geom_line(aes(y = jaild), colour="black") + 
+  geom_line(aes(y = comserd), colour="grey") +
+  geom_line(aes(y = mra1517), colour = "red") + 
+  geom_line(aes(y = spircons), colour="green") + 
+  geom_line(aes(y = beertax), colour="yellow") + 
+  ylab(label="Vehicle Fatality Rate") + 
+  xlab("Year")
+
+ggplot(data=ct_car_fatalities.df ,
+       aes(x=year, y=mra1517, colour=state)) +
+  geom_line()
+
+
+attach(car_fatalities.df)
+ct_car_fatalities.df <- car_fatalities.df[which(state =='CT'),]
+detach(car_fatalities.df)
+
+
+ggplot(data=ct_car_fatalities.df,
+       aes(x=year, y=mra1517, colour=mra1517)) +
+  geom_line()
+
+plot_usmap(data = car_fatalities.df, values = "mra1517", lines = "white") + 
+  scale_fill_continuous(name = "Vehicle Fatality Rate") + 
+  theme(legend.position = "right")
+
+
+plot_ly(data = car_fatalities.df.complete, x = ~pop, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~vmiles, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~yngdrv, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~spircons, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~unrate, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~perinc, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~beertax, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~sobapt, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~mormon, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~dry, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~pop1517, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~pop1820, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~pop2124, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~miles, y = ~allmort, color = ~law, colors = "Set1")
+plot_ly(data = car_fatalities.df.complete, x = ~gspch, y = ~allmort, color = ~law, colors = "Set1")
+
+
+ggplot(data=car_fatalities.df ,
+       aes(x=pop, y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=vmiles, y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=yngdrv, y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=spircons, y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=unrate, y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=perinc , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=beertax , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=pop1517 , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=pop1820 , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=pop2124 , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=miles , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=gspch , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=perinc , y=allmort, colour=)) +
+  geom_line()
+
+ggplot(data=car_fatalities.df ,
+       aes(x=sobapt , y=allmort, colour=)) +
+  geom_line()
+
+
+lm(formula = car_fatalities.df$allmort ~ car_fatalities.df$jaild)
+
+P_OLS <- plm(log(allmort)~jaild+comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+gspch
+               ,index=c("state","year"), model="pooling",data=car_fatalities.df)
+summary(P_OLS)
+
+
+FEM_T <- plm(log(allmort)~factor(year)+jaild+a1517+a1820+a2124+aidall
+             ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(FEM_T)
+
+P_OLS_jaild <- plm(log(allmort)~jaild, data = car_fatalities.df, model = "pooling", index = c("state","year"))
+summary(P_OLS_jaild)
+
+P_OLS_comserd <- plm(log(allmort)~comserd, data = car_fatalities.df, model = "pooling", index = c("state","year"))
+summary(P_OLS_comserd)
+
+P_OLS_jaild2 <- plm(log(allmort)~jaild+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+gspch
+                   ,index=c("state","year"), model="pooling",data=car_fatalities.df)
+summary(P_OLS_jaild2)
+
+
+P_OLS_comserd2 <- plm(log(allmort)~comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+gspch
+                    ,index=c("state","year"), model="pooling",data=car_fatalities.df)
+summary(P_OLS_comserd2)
+
+P_OLS_jaild3 <- plm(log(allmort)~jaild+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+log(pop1517)+log(pop1820)+log(pop2124)+log(miles)+gspch
+                    ,index=c("state","year"), model="pooling",data=car_fatalities.df)
+summary(P_OLS_jaild3)
+
+P_OLS_comserd3 <- plm(log(allmort)~comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+log(pop1517)+log(pop1820)+log(pop2124)+log(miles)+gspch
+                    ,index=c("state","year"), model="pooling",data=car_fatalities.df)
+summary(P_OLS_comserd3)
+
+EFE_jaild1 <- plm(log(allmort)~jaild+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+miles+gspch
+                ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(EFE_jaild1)
+
+EFE_comserd1 <- plm(log(allmort)~comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+miles+gspch
+                  ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(EFE_comserd1)
+
+EFE_jaild2 <- plm(log(allmort)~jaild+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+log(pop1517)+log(pop1820)+log(pop2124)+log(miles)+gspch
+                      ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(EFE_jaild2)
+
+EFE_comserd2 <- plm(log(allmort)~comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+log(pop1517)+log(pop1820)+log(pop2124)+log(miles)+gspch
+                    ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(EFE_comserd2)
+
+ETFE_jaild1 <- plm(log(allmort)~jaild+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+miles+gspch+factor(year)
+                   ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(ETFE_jaild1)
+
+ETFE_comserd1 <- plm(log(allmort)~comserd+spircons+unrate+perinc+yngdrv+vmiles+a1517+a1820+a2124+aidall+pop1517+pop1820+pop2124+miles+gspch+factor(year)
+                   ,index=c("state","year"), model="within",data=car_fatalities.df)
+summary(ETFE_comserd1)
+
+
+
+
+```
